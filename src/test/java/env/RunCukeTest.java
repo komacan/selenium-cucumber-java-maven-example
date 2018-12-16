@@ -13,7 +13,7 @@ import cucumber.api.junit.Cucumber;
 			 "pretty:target/cucumber-json-report.json"   // for json result
 		     },
 		features = "classpath:features",
-		glue = {"info.seleniumcucumber.stepdefinitions",   // predefined step definitions package
+		glue = {
 				"info.seleniumcucumber.userStepDefintions" // user step definitions package
 			   }
 )

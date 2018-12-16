@@ -1,28 +1,52 @@
 package info.seleniumcucumber.userStepDefintions;
-import org.junit.Assert;
-import org.openqa.selenium.By;
+
+import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import env.DriverUtil;
-import info.seleniumcucumber.methods.BaseTest;
+import info.seleniumcucumber.userStepDefintions.pages.SearchPage;
 
+public class UserStepDefinitions {
 
-public class UserStepDefinitions implements BaseTest {
-	
-	protected WebDriver driver = DriverUtil.getDefaultDriver();
-	
-	@Given("^I should get logged-in$")
-	public void should_logged_in() throws Throwable {
-		
-		By selection = By.id("flash");
-        (new WebDriverWait(driver, 30)).until(
-                ExpectedConditions.visibilityOfElementLocated(selection));
-		String msg = driver.findElement(By.id("flash")).getText();
-		if(!msg.isEmpty())
-			msg = msg.split("\n")[0].trim();
-		Assert.assertEquals("You logged into a secure area!", msg);
+	WebDriver driver = DriverUtil.getDefaultDriver();
+	SearchPage search;
+
+	@Given("^I navigate to \"([^\"]*)\"$")
+	public void i_navigate_to(String arg1) throws Throwable {
+		search = new SearchPage(driver);
+		search.navigateToHomePage(arg1);
 	}
+
+	@And("^I enter \"([^\"]*)\" into input field$")
+	public void iEnterIntoInputField(String arg1) throws Throwable {
+		search.enterSearchText(arg1);
+	}
+
+	@When("^I click search$")
+	public void iClickSearch() throws Throwable {
+		search.clickSearchButton();
+	}
+
+	@Then("^I should get results for \"([^\"]*)\"$")
+	public void iShouldGetSomeResults(String arg1) throws Throwable {
+		assertTrue(driver.getTitle().contains(arg1));
+		
+	}
+
+	@Before
+	public void startUp() {
+		//driver.
+	}
+
+	@After
+	public void tearDown() {
+		driver.quit();
+	}
+
+
 }
